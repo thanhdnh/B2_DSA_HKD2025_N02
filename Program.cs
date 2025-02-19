@@ -1,4 +1,7 @@
-﻿public class Program
+﻿using System.Dynamic;
+using System.Security.Cryptography;
+
+public class Program
 {
     public static void Main(string[] args)
     {
@@ -34,6 +37,23 @@
         randomArray(arr);
         foreach(int v in arr)
             Console.Write(v + " ");
+
+        Array o1, o2;
+        o1 = Array.CreateInstance(typeof(int), n/2);
+        o2 = Array.CreateInstance(typeof(int), 
+                        new int[]{n/2}, new int[]{n/2});
+        splitArray(arr, o1, o2);
+        Console.WriteLine("\n---");
+        for(int i = o1.GetLowerBound(0); i<=o1.GetUpperBound(0); i++)
+            Console.Write($"[{i}]={o1.GetValue(i)} ");
+        Console.WriteLine("\n---");
+        for(int i = o2.GetLowerBound(0); i<=o2.GetUpperBound(0); i++)
+            Console.Write($"[{i}]={o2.GetValue(i)} ");
+
+        Array res = combineArray(o1, o2);
+        Console.WriteLine("\n---");
+        for(int i = res.GetLowerBound(0); i<=res.GetUpperBound(0); i++)
+            Console.Write($"[{i}]={res.GetValue(i)} ");
     }//Main
 
     /* Yêu cầu: Cho một mảng 1 chiều int gồm có 10 phần tử 
@@ -59,9 +79,15 @@
                 input.SetValue(r.Next(100), i);
     }
     static void splitArray(Array input, Array o1, Array o2){
-        
+        for(int i=o1.GetLowerBound(0); i<=o1.GetUpperBound(0);i++)
+            o1.SetValue(input.GetValue(i), i);
+        for(int i=o2.GetLowerBound(0); i<=o2.GetUpperBound(0);i++)
+            o2.SetValue(input.GetValue(i), i);
     }
     static Array combineArray(Array o1, Array o2){
-        return null;
+        Array ar3 = Array.CreateInstance(typeof(int) , o1.Length);
+        for (int i= 0 ; i<o1.Length ; i++ )
+            ar3.SetValue((int)o1.GetValue(i)+(int)o2.GetValue(o2.GetLowerBound(0)+i) ,i);
+        return ar3;
     }
 }
